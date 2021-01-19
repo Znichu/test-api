@@ -11,6 +11,6 @@
     "should": "^13.2.3"
   },
   "scripts": {
-    "test": "mocha --timeout 5000"
+    "test": "mocha --timeout 10000"
   }
 }
