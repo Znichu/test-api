@@ -4,6 +4,10 @@ chai.use(chaiHttp);
 chai.should();
 const server = 'https://mobile.borodach.pro/api';
 
+function getRandomIntInclusive(max) {
+    let rand = Math.random() * (max + 1 - 0);
+    return Math.floor(rand);
+}
 
 describe('Promotions API', () => {
 
@@ -14,13 +18,11 @@ describe('Promotions API', () => {
             chai.request(server)
                 .get('/promotions')
                 .end((err, res) => {
-                    if (err) {
-                        return done(err);
-                    }
                     res.should.have.status(200);
                     res.body.should.be.a('array');
                     if (res.body.length !== 0) {
-                        promotionId = res.body[0].id
+                        let index = getRandomIntInclusive(res.body.length);
+                        promotionId = res.body[index].id;
                     }
                     done();
                 });
@@ -32,9 +34,6 @@ describe('Promotions API', () => {
             chai.request(server)
                 .get('/promotions/' + promotionId)
                 .end((err, res) => {
-                    if (err) {
-                        return done(err);
-                    }
                     res.should.have.status(200);
                     res.body.should.be.a('object');
                     res.body.should.have.property('title');
@@ -49,8 +48,8 @@ describe('Promotions API', () => {
                     res.body.should.have.property('url');
                     res.body.should.have.property('type');
                     res.body.should.have.property('id').eq(promotionId);
-                done();
-            })
+                    done();
+                })
         })
     })
 
@@ -60,14 +59,12 @@ describe('Promotions API', () => {
             chai.request(server)
                 .get('/promotions/' + wrongId)
                 .end((err, res) => {
-                    if (err) {
-                        return done(err);
-                    }
                     res.should.have.status(404);
                     done();
                 });
         })
     })
 })
+
 
 
